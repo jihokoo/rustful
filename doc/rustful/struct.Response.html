@@ -44,7 +44,7 @@
 <h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>rustful</a>::<wbr><a class='struct' href=''>Response</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-4082' href='../src/rustful/lib.rs.html#659-667'>[src]</a></span></h1>
+        </span><a id='src-4128' href='../src/rustful/lib.rs.html#663-671'>[src]</a></span></h1>
 <pre class='rust struct'>pub struct Response&lt;'a, 'b&gt; {
     // some fields omitted
 }</pre><div class='docblock'><p>An interface for setting HTTP status code and response headers, before data gets written to the client.</p>
@@ -59,7 +59,7 @@
 
 <p>Status code and headers will be written to the client and <code>ResponsePlugin::begin()</code>
 will be called on the registered response plugins.</p>
-</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><a class='stability Unmarked' title='No stability level'></a><code>impl&lt;'a, 'b&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Drop.html' title='core::ops::Drop'>Drop</a> for <a class='struct' href='../rustful/struct.Response.html' title='rustful::Response'>Response</a>&lt;'a, 'b&gt;</code></h3><div class='impl-items'><h4 id='method.drop' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.drop' class='fnname'>drop</a>(&amp;mut self)</code></h4>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;'a, 'b&gt; <a class='trait' href='http://doc.rust-lang.org/nightly/core/ops/trait.Drop.html' title='core::ops::Drop'>Drop</a> for <a class='struct' href='../rustful/struct.Response.html' title='rustful::Response'>Response</a>&lt;'a, 'b&gt;</code></h3><div class='impl-items'><h4 id='method.drop' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.drop' class='fnname'>drop</a>(&amp;mut self)</code></h4>
 <div class='docblock'><p>Writes status code and headers and closes the connection.</p>
 </div></div></section>
     <section id='search' class="content hidden"></section>

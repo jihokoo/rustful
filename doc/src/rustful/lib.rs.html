@@ -978,6 +978,10 @@
 <span id='936'>936</span>
 <span id='937'>937</span>
 <span id='938'>938</span>
+<span id='939'>939</span>
+<span id='940'>940</span>
+<span id='941'>941</span>
+<span id='942'>942</span>
 </pre><pre class='rust '>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>crate_name</span> <span class='op'>=</span> <span class='string'>&quot;rustful&quot;</span>]</span>
 
@@ -1018,6 +1022,7 @@
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>error</span>::<span class='ident'>FromError</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>default</span>::<span class='ident'>Default</span>;
 <span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>sync</span>::<span class='ident'>RWLock</span>;
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>borrow</span>::<span class='ident'>ToOwned</span>;
 
 <span class='kw'>use</span> <span class='ident'>time</span>::<span class='ident'>Timespec</span>;
 
@@ -1074,7 +1079,7 @@
 }
 
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> <span class='ident'>ResponseAction</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
-	<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>write</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>T</span>: <span class='ident'>IntoResponseData</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;&gt;</span>(<span class='ident'>data</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>ResponseAction</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
+	<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>write</span><span class='op'>&lt;</span><span class='ident'>T</span>: <span class='ident'>IntoResponseData</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;&gt;</span>(<span class='ident'>data</span>: <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>T</span><span class='op'>&gt;</span>) <span class='op'>-&gt;</span> <span class='ident'>ResponseAction</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;</span> {
 		<span class='ident'>ResponseAction</span>::<span class='ident'>Write</span>(<span class='ident'>data</span>.<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>d</span><span class='op'>|</span> <span class='ident'>d</span>.<span class='ident'>into_response_data</span>()))
 	}
 
@@ -1139,7 +1144,7 @@
 	<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>into_string</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span><span class='ident'>String</span><span class='op'>&gt;</span> {
 		<span class='kw'>match</span> <span class='self'>self</span> {
 			<span class='ident'>ResponseData</span>::<span class='ident'>String</span>(<span class='ident'>string</span>) <span class='op'>=&gt;</span> <span class='prelude-val'>Some</span>(<span class='ident'>string</span>),
-			<span class='ident'>ResponseData</span>::<span class='ident'>StringSlice</span>(<span class='ident'>string</span>) <span class='op'>=&gt;</span> <span class='prelude-val'>Some</span>(<span class='ident'>string</span>.<span class='ident'>into_string</span>()),
+			<span class='ident'>ResponseData</span>::<span class='ident'>StringSlice</span>(<span class='ident'>string</span>) <span class='op'>=&gt;</span> <span class='prelude-val'>Some</span>(<span class='ident'>string</span>.<span class='ident'>to_owned</span>()),
 			_ <span class='op'>=&gt;</span> <span class='prelude-val'>None</span>
 		}
 	}
@@ -1186,6 +1191,7 @@
 <span class='kw'>pub</span> <span class='kw'>trait</span> <span class='ident'>Router</span><span class='op'>&lt;</span><span class='ident'>Handler</span><span class='op'>&gt;</span> {
 	<span class='doccomment'>///Find and return the matching handler and variable values.</span>
 	<span class='kw'>fn</span> <span class='ident'>find</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>method</span>: <span class='kw-2'>&amp;</span><span class='ident'>Method</span>, <span class='ident'>path</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span>(<span class='kw-2'>&amp;</span><span class='ident'>Handler</span>, <span class='ident'>HashMap</span><span class='op'>&lt;</span><span class='ident'>String</span>, <span class='ident'>String</span><span class='op'>&gt;</span>)<span class='op'>&gt;</span>;
+	<span class='kw'>fn</span> <span class='ident'>insert</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>method</span>: <span class='ident'>Method</span>, <span class='ident'>path</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>handler</span>: <span class='ident'>Handler</span>);
 }
 
 
@@ -1214,6 +1220,8 @@
 	<span class='kw'>fn</span> <span class='ident'>find</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>, <span class='ident'>_method</span>: <span class='kw-2'>&amp;</span><span class='ident'>Method</span>, <span class='ident'>_path</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Option</span><span class='op'>&lt;</span>(<span class='kw-2'>&amp;</span><span class='ident'>H</span>, <span class='ident'>HashMap</span><span class='op'>&lt;</span><span class='ident'>String</span>, <span class='ident'>String</span><span class='op'>&gt;</span>)<span class='op'>&gt;</span> {
 		<span class='prelude-val'>Some</span>((<span class='self'>self</span>, <span class='ident'>HashMap</span>::<span class='ident'>new</span>()))
 	}
+
+	<span class='kw'>fn</span> <span class='ident'>insert</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>_method</span>: <span class='ident'>Method</span>, <span class='ident'>_path</span>: <span class='kw-2'>&amp;</span><span class='ident'>str</span>, <span class='ident'>_handler</span>: <span class='ident'>H</span>) {}
 }
 
 
@@ -1444,7 +1452,7 @@
 			<span class='ident'>port</span>: <span class='number'>80</span>,
 			<span class='ident'>host</span>: <span class='ident'>Ipv4Addr</span>(<span class='number'>0</span>, <span class='number'>0</span>, <span class='number'>0</span>, <span class='number'>0</span>),
 			<span class='ident'>tasks</span>: <span class='prelude-val'>None</span>,
-			<span class='ident'>server</span>: <span class='string'>&quot;rustful&quot;</span>.<span class='ident'>into_string</span>(),
+			<span class='ident'>server</span>: <span class='string'>&quot;rustful&quot;</span>.<span class='ident'>to_owned</span>(),
 			<span class='ident'>content_type</span>: <span class='ident'>Mime</span>(
 				<span class='ident'>hyper</span>::<span class='ident'>mime</span>::<span class='ident'>TopLevel</span>::<span class='ident'>Text</span>,
 				<span class='ident'>hyper</span>::<span class='ident'>mime</span>::<span class='ident'>SubLevel</span>::<span class='ident'>Plain</span>,
@@ -1590,11 +1598,11 @@
 	<span class='kw'>match</span> <span class='ident'>path</span>.<span class='ident'>as_slice</span>().<span class='ident'>find</span>(<span class='string'>&#39;?&#39;</span>) {
 		<span class='prelude-val'>Some</span>(<span class='ident'>index</span>) <span class='op'>=&gt;</span> {
 			<span class='kw'>let</span> (<span class='ident'>query</span>, <span class='ident'>fragment</span>) <span class='op'>=</span> <span class='ident'>parse_fragment</span>(<span class='ident'>path</span>.<span class='ident'>as_slice</span>().<span class='ident'>slice</span>(<span class='ident'>index</span><span class='op'>+</span><span class='number'>1</span>, <span class='ident'>path</span>.<span class='ident'>len</span>()));
-			(<span class='ident'>path</span>.<span class='ident'>as_slice</span>().<span class='ident'>slice</span>(<span class='number'>0</span>, <span class='ident'>index</span>).<span class='ident'>into_string</span>(), <span class='ident'>utils</span>::<span class='ident'>parse_parameters</span>(<span class='ident'>query</span>.<span class='ident'>as_bytes</span>()), <span class='ident'>fragment</span>.<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>f</span><span class='op'>|</span> <span class='ident'>f</span>.<span class='ident'>into_string</span>()))
+			(<span class='ident'>path</span>.<span class='ident'>as_slice</span>().<span class='ident'>slice</span>(<span class='number'>0</span>, <span class='ident'>index</span>).<span class='ident'>to_owned</span>(), <span class='ident'>utils</span>::<span class='ident'>parse_parameters</span>(<span class='ident'>query</span>.<span class='ident'>as_bytes</span>()), <span class='ident'>fragment</span>.<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>f</span><span class='op'>|</span> <span class='ident'>f</span>.<span class='ident'>to_owned</span>()))
 		},
 		<span class='prelude-val'>None</span> <span class='op'>=&gt;</span> {
 			<span class='kw'>let</span> (<span class='ident'>path</span>, <span class='ident'>fragment</span>) <span class='op'>=</span> <span class='ident'>parse_fragment</span>(<span class='ident'>path</span>.<span class='ident'>as_slice</span>());
-			(<span class='ident'>path</span>.<span class='ident'>into_string</span>(), <span class='ident'>HashMap</span>::<span class='ident'>new</span>(), <span class='ident'>fragment</span>.<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>f</span><span class='op'>|</span> <span class='ident'>f</span>.<span class='ident'>into_string</span>()))
+			(<span class='ident'>path</span>.<span class='ident'>to_owned</span>(), <span class='ident'>HashMap</span>::<span class='ident'>new</span>(), <span class='ident'>fragment</span>.<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>f</span><span class='op'>|</span> <span class='ident'>f</span>.<span class='ident'>to_owned</span>()))
 		}
 	}
 }
@@ -1775,7 +1783,7 @@
 <span class='kw'>impl</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='lifetime'>&#39;b</span><span class='op'>&gt;</span> <span class='ident'>ResponseWriter</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='lifetime'>&#39;b</span><span class='op'>&gt;</span> {
 
 	<span class='doccomment'>///Writes response body data to the client.</span>
-	<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>send</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span>, <span class='ident'>Content</span>: <span class='ident'>IntoResponseData</span><span class='op'>&lt;</span><span class='lifetime'>&#39;a</span><span class='op'>&gt;&gt;</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>content</span>: <span class='ident'>Content</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(), <span class='ident'>ResponseError</span><span class='op'>&gt;</span> {
+	<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>send</span><span class='op'>&lt;</span><span class='lifetime'>&#39;d</span>, <span class='ident'>Content</span>: <span class='ident'>IntoResponseData</span><span class='op'>&lt;</span><span class='lifetime'>&#39;d</span><span class='op'>&gt;&gt;</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>content</span>: <span class='ident'>Content</span>) <span class='op'>-&gt;</span> <span class='prelude-ty'>Result</span><span class='op'>&lt;</span>(), <span class='ident'>ResponseError</span><span class='op'>&gt;</span> {
 		<span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>writer</span> <span class='op'>=</span> <span class='macro'>try</span><span class='macro'>!</span>(<span class='self'>self</span>.<span class='ident'>writer</span>.<span class='ident'>as_mut</span>().<span class='ident'>expect</span>(<span class='string'>&quot;write after close&quot;</span>).<span class='ident'>as_mut</span>().<span class='ident'>map_err</span>(<span class='op'>|</span><span class='ident'>e</span><span class='op'>|</span> <span class='ident'>e</span>.<span class='ident'>clone</span>()));
 		<span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>plugin_result</span> <span class='op'>=</span> <span class='ident'>ResponseAction</span>::<span class='ident'>write</span>(<span class='prelude-val'>Some</span>(<span class='ident'>content</span>));
 
@@ -1874,34 +1882,34 @@
 
 <span class='attribute'>#[<span class='ident'>test</span>]</span>
 <span class='kw'>fn</span> <span class='ident'>parse_path_parts</span>() {
-	<span class='kw'>let</span> <span class='ident'>with</span> <span class='op'>=</span> <span class='string'>&quot;this&quot;</span>.<span class='ident'>into_string</span>();
-	<span class='kw'>let</span> <span class='ident'>and</span> <span class='op'>=</span> <span class='string'>&quot;that&quot;</span>.<span class='ident'>into_string</span>();
+	<span class='kw'>let</span> <span class='ident'>with</span> <span class='op'>=</span> <span class='string'>&quot;this&quot;</span>.<span class='ident'>to_owned</span>();
+	<span class='kw'>let</span> <span class='ident'>and</span> <span class='op'>=</span> <span class='string'>&quot;that&quot;</span>.<span class='ident'>to_owned</span>();
 	<span class='kw'>let</span> (<span class='ident'>path</span>, <span class='ident'>query</span>, <span class='ident'>fragment</span>) <span class='op'>=</span> <span class='ident'>parse_path</span>(<span class='ident'>String</span>::<span class='ident'>from_str</span>(<span class='string'>&quot;/path/to/something?with=this&amp;and=that#lol&quot;</span>));
 	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>path</span>, <span class='ident'>String</span>::<span class='ident'>from_str</span>(<span class='string'>&quot;/path/to/something&quot;</span>));
-	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>query</span>.<span class='ident'>get</span>(<span class='kw-2'>&amp;</span><span class='string'>&quot;with&quot;</span>.<span class='ident'>into_string</span>()), <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>with</span>));
-	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>query</span>.<span class='ident'>get</span>(<span class='kw-2'>&amp;</span><span class='string'>&quot;and&quot;</span>.<span class='ident'>into_string</span>()), <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>and</span>));
+	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>query</span>.<span class='ident'>get</span>(<span class='string'>&quot;with&quot;</span>), <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>with</span>));
+	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>query</span>.<span class='ident'>get</span>(<span class='string'>&quot;and&quot;</span>), <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>and</span>));
 	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>fragment</span>, <span class='prelude-val'>Some</span>(<span class='ident'>String</span>::<span class='ident'>from_str</span>(<span class='string'>&quot;lol&quot;</span>)));
 }
 
 <span class='attribute'>#[<span class='ident'>test</span>]</span>
 <span class='kw'>fn</span> <span class='ident'>parse_strange_path</span>() {
-	<span class='kw'>let</span> <span class='ident'>with</span> <span class='op'>=</span> <span class='string'>&quot;this&quot;</span>.<span class='ident'>into_string</span>();
-	<span class='kw'>let</span> <span class='ident'>and</span> <span class='op'>=</span> <span class='string'>&quot;what?&quot;</span>.<span class='ident'>into_string</span>();
+	<span class='kw'>let</span> <span class='ident'>with</span> <span class='op'>=</span> <span class='string'>&quot;this&quot;</span>.<span class='ident'>to_owned</span>();
+	<span class='kw'>let</span> <span class='ident'>and</span> <span class='op'>=</span> <span class='string'>&quot;what?&quot;</span>.<span class='ident'>to_owned</span>();
 	<span class='kw'>let</span> (<span class='ident'>path</span>, <span class='ident'>query</span>, <span class='ident'>fragment</span>) <span class='op'>=</span> <span class='ident'>parse_path</span>(<span class='ident'>String</span>::<span class='ident'>from_str</span>(<span class='string'>&quot;/path/to/something?with=this&amp;and=what?#&quot;</span>));
 	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>path</span>, <span class='ident'>String</span>::<span class='ident'>from_str</span>(<span class='string'>&quot;/path/to/something&quot;</span>));
-	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>query</span>.<span class='ident'>get</span>(<span class='kw-2'>&amp;</span><span class='string'>&quot;with&quot;</span>.<span class='ident'>into_string</span>()), <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>with</span>));
-	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>query</span>.<span class='ident'>get</span>(<span class='kw-2'>&amp;</span><span class='string'>&quot;and&quot;</span>.<span class='ident'>into_string</span>()), <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>and</span>));
+	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>query</span>.<span class='ident'>get</span>(<span class='string'>&quot;with&quot;</span>), <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>with</span>));
+	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>query</span>.<span class='ident'>get</span>(<span class='string'>&quot;and&quot;</span>), <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>and</span>));
 	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>fragment</span>, <span class='prelude-val'>Some</span>(<span class='ident'>String</span>::<span class='ident'>from_str</span>(<span class='string'>&quot;&quot;</span>)));
 }
 
 <span class='attribute'>#[<span class='ident'>test</span>]</span>
 <span class='kw'>fn</span> <span class='ident'>parse_missing_path_parts</span>() {
-	<span class='kw'>let</span> <span class='ident'>with</span> <span class='op'>=</span> <span class='string'>&quot;this&quot;</span>.<span class='ident'>into_string</span>();
-	<span class='kw'>let</span> <span class='ident'>and</span> <span class='op'>=</span> <span class='string'>&quot;that&quot;</span>.<span class='ident'>into_string</span>();
+	<span class='kw'>let</span> <span class='ident'>with</span> <span class='op'>=</span> <span class='string'>&quot;this&quot;</span>.<span class='ident'>to_owned</span>();
+	<span class='kw'>let</span> <span class='ident'>and</span> <span class='op'>=</span> <span class='string'>&quot;that&quot;</span>.<span class='ident'>to_owned</span>();
 	<span class='kw'>let</span> (<span class='ident'>path</span>, <span class='ident'>query</span>, <span class='ident'>fragment</span>) <span class='op'>=</span> <span class='ident'>parse_path</span>(<span class='ident'>String</span>::<span class='ident'>from_str</span>(<span class='string'>&quot;/path/to/something?with=this&amp;and=that&quot;</span>));
 	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>path</span>, <span class='ident'>String</span>::<span class='ident'>from_str</span>(<span class='string'>&quot;/path/to/something&quot;</span>));
-	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>query</span>.<span class='ident'>get</span>(<span class='kw-2'>&amp;</span><span class='string'>&quot;with&quot;</span>.<span class='ident'>into_string</span>()), <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>with</span>));
-	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>query</span>.<span class='ident'>get</span>(<span class='kw-2'>&amp;</span><span class='string'>&quot;and&quot;</span>.<span class='ident'>into_string</span>()), <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>and</span>));
+	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>query</span>.<span class='ident'>get</span>(<span class='string'>&quot;with&quot;</span>), <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>with</span>));
+	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>query</span>.<span class='ident'>get</span>(<span class='string'>&quot;and&quot;</span>), <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>and</span>));
 	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>fragment</span>, <span class='prelude-val'>None</span>);
 
 
@@ -1913,8 +1921,8 @@
 
 	<span class='kw'>let</span> (<span class='ident'>path</span>, <span class='ident'>query</span>, <span class='ident'>fragment</span>) <span class='op'>=</span> <span class='ident'>parse_path</span>(<span class='ident'>String</span>::<span class='ident'>from_str</span>(<span class='string'>&quot;?with=this&amp;and=that#lol&quot;</span>));
 	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>path</span>, <span class='ident'>String</span>::<span class='ident'>from_str</span>(<span class='string'>&quot;&quot;</span>));
-	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>query</span>.<span class='ident'>get</span>(<span class='kw-2'>&amp;</span><span class='string'>&quot;with&quot;</span>.<span class='ident'>into_string</span>()), <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>with</span>));
-	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>query</span>.<span class='ident'>get</span>(<span class='kw-2'>&amp;</span><span class='string'>&quot;and&quot;</span>.<span class='ident'>into_string</span>()), <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>and</span>));
+	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>query</span>.<span class='ident'>get</span>(<span class='string'>&quot;with&quot;</span>), <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>with</span>));
+	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>query</span>.<span class='ident'>get</span>(<span class='string'>&quot;and&quot;</span>), <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>and</span>));
 	<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>fragment</span>, <span class='prelude-val'>Some</span>(<span class='ident'>String</span>::<span class='ident'>from_str</span>(<span class='string'>&quot;lol&quot;</span>)));
 }
 </pre>

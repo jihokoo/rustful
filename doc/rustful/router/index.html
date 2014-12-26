@@ -44,12 +44,12 @@
 <h1 class='fqn'><span class='in-band'>Module <a href='../index.html'>rustful</a>::<wbr><a class='mod' href=''>router</a><wbr></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span><a id='src-198' href='../../src/rustful/router.rs.html#1-660'>[src]</a></span></h1>
+        </span><a id='src-200' href='../../src/rustful/router.rs.html#1-662'>[src]</a></span></h1>
 <div class='docblock'><p><code>TreeRouter</code> stores items, such as request handlers, using an HTTP method and a path as keys.</p>
 
 <p>The <code>TreeRouter</code> can be created from a vector of predefined paths, like this:</p>
 <pre class='rust '>
-<span class='kw'>let</span> <span class='ident'>routes</span> <span class='op'>=</span> [
+<span class='kw'>let</span> <span class='ident'>routes</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[
     (<span class='ident'>Get</span>, <span class='string'>&quot;/about&quot;</span>, <span class='ident'>about_us</span>),
     (<span class='ident'>Get</span>, <span class='string'>&quot;/user/:user&quot;</span>, <span class='ident'>show_user</span>),
     (<span class='ident'>Get</span>, <span class='string'>&quot;/product/:name&quot;</span>, <span class='ident'>show_product</span>),
@@ -57,21 +57,21 @@
     (<span class='ident'>Get</span>, <span class='string'>&quot;/&quot;</span>, <span class='ident'>show_welcome</span>)
 ];
 
-<span class='kw'>let</span> <span class='ident'>router</span> <span class='op'>=</span> <span class='ident'>TreeRouter</span>::<span class='ident'>from_routes</span>(<span class='kw-2'>&amp;</span><span class='ident'>routes</span>);
+<span class='kw'>let</span> <span class='ident'>router</span> <span class='op'>=</span> <span class='ident'>TreeRouter</span>::<span class='ident'>from_routes</span>(<span class='ident'>routes</span>);
 </pre>
 
 <p>Routes may also be added after the <code>TreeRouter</code> was created, like this:</p>
 <pre class='rust '>
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>router</span> <span class='op'>=</span> <span class='ident'>TreeRouter</span>::<span class='ident'>new</span>();
 
-<span class='ident'>router</span>.<span class='ident'>insert_item</span>(<span class='ident'>Get</span>, <span class='string'>&quot;/about&quot;</span>, <span class='ident'>about_us</span>);
-<span class='ident'>router</span>.<span class='ident'>insert_item</span>(<span class='ident'>Get</span>, <span class='string'>&quot;/user/:user&quot;</span>, <span class='ident'>show_user</span>);
-<span class='ident'>router</span>.<span class='ident'>insert_item</span>(<span class='ident'>Get</span>, <span class='string'>&quot;/product/:name&quot;</span>, <span class='ident'>show_product</span>);
-<span class='ident'>router</span>.<span class='ident'>insert_item</span>(<span class='ident'>Get</span>, <span class='string'>&quot;/*&quot;</span>, <span class='ident'>show_error</span>);
-<span class='ident'>router</span>.<span class='ident'>insert_item</span>(<span class='ident'>Get</span>, <span class='string'>&quot;/&quot;</span>, <span class='ident'>show_welcome</span>);
+<span class='ident'>router</span>.<span class='ident'>insert</span>(<span class='ident'>Get</span>, <span class='string'>&quot;/about&quot;</span>, <span class='ident'>about_us</span>);
+<span class='ident'>router</span>.<span class='ident'>insert</span>(<span class='ident'>Get</span>, <span class='string'>&quot;/user/:user&quot;</span>, <span class='ident'>show_user</span>);
+<span class='ident'>router</span>.<span class='ident'>insert</span>(<span class='ident'>Get</span>, <span class='string'>&quot;/product/:name&quot;</span>, <span class='ident'>show_product</span>);
+<span class='ident'>router</span>.<span class='ident'>insert</span>(<span class='ident'>Get</span>, <span class='string'>&quot;/*&quot;</span>, <span class='ident'>show_error</span>);
+<span class='ident'>router</span>.<span class='ident'>insert</span>(<span class='ident'>Get</span>, <span class='string'>&quot;/&quot;</span>, <span class='ident'>show_welcome</span>);
 </pre>
 
-<p>There is also a special macro for creating routers, called <code>router!(...)</code>:</p>
+<p>TreeRouter can also be used with a special macro for creating routes, called <code>insert_routes!{...}</code>:</p>
 <pre class='rust '>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>phase</span>)]</span>
 <span class='attribute'>#[<span class='ident'>phase</span>(<span class='ident'>plugin</span>)]</span>
@@ -82,12 +82,14 @@
 ...
 
 
-<span class='kw'>let</span> <span class='ident'>router</span> <span class='op'>=</span> <span class='macro'>router</span><span class='macro'>!</span>{
-    <span class='string'>&quot;/about&quot;</span> <span class='op'>=&gt;</span> <span class='ident'>Get</span>: <span class='ident'>about_us</span>,
-    <span class='string'>&quot;/user/:user&quot;</span> <span class='op'>=&gt;</span> <span class='ident'>Get</span>: <span class='ident'>show_user</span>,
-    <span class='string'>&quot;/product/:name&quot;</span> <span class='op'>=&gt;</span> <span class='ident'>Get</span>: <span class='ident'>show_product</span>,
-    <span class='string'>&quot;/*&quot;</span> <span class='op'>=&gt;</span> <span class='ident'>Get</span>: <span class='ident'>show_error</span>,
-    <span class='string'>&quot;/&quot;</span> <span class='op'>=&gt;</span> <span class='ident'>Get</span>: <span class='ident'>show_welcome</span>
+<span class='kw'>let</span> <span class='ident'>router</span> <span class='op'>=</span> <span class='macro'>insert_routes</span><span class='macro'>!</span>{
+    <span class='ident'>TreeRouter</span>::<span class='ident'>new</span>(): {
+        <span class='string'>&quot;/about&quot;</span> <span class='op'>=&gt;</span> <span class='ident'>Get</span>: <span class='ident'>about_us</span>,
+        <span class='string'>&quot;/user/:user&quot;</span> <span class='op'>=&gt;</span> <span class='ident'>Get</span>: <span class='ident'>show_user</span>,
+        <span class='string'>&quot;/product/:name&quot;</span> <span class='op'>=&gt;</span> <span class='ident'>Get</span>: <span class='ident'>show_product</span>,
+        <span class='string'>&quot;/*&quot;</span> <span class='op'>=&gt;</span> <span class='ident'>Get</span>: <span class='ident'>show_error</span>,
+        <span class='string'>&quot;/&quot;</span> <span class='op'>=&gt;</span> <span class='ident'>Get</span>: <span class='ident'>show_welcome</span>
+    }
 };
 </pre>
 
@@ -96,8 +98,7 @@ but it allows more advanced structures to be defined without
 the need to write the same paths multiple times. This can be
 useful to lower the risk of typing errors, among other things.</p>
 
-<p>There is also a macro for creating a route vector, like the one in the first example.
-These can be found in the crate <code>rustful_macros</code>.</p>
+<p>This can be found in the crate <code>rustful_macros</code>.</p>
 </div><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
 <table>
                     <tr>
