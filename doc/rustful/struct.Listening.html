@@ -44,14 +44,14 @@
 <h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>rustful</a>::<wbr><a class='struct' href=''>Listening</a><wbr><a class='stability Experimental' title=''>Experimental</a></span><span class='out-of-band'><span id='render-detail'>
             <a id="collapse-all" href="#">[-]
             </a>&nbsp;<a id="expand-all" href="#">[+]</a>
-        </span></span></h1>
-<pre class='rust struct'>pub struct Listening&lt;A = HttpAcceptor&gt; {
+        </span><a id='src-25530' href='../hyper/server/struct.Listening.html?gotosrc=25530'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct Listening&lt;A = <a class='struct' href='../hyper/net/struct.HttpAcceptor.html' title='hyper::net::HttpAcceptor'>HttpAcceptor</a>&gt; {
     pub socket: <a class='struct' href='http://doc.rust-lang.org/nightly/std/io/net/ip/struct.SocketAddr.html' title='std::io::net::ip::SocketAddr'>SocketAddr</a>,
     // some fields omitted
 }</pre><div class='docblock'><p>A listening server, which can later be closed.</p>
 </div><h2 class='fields'>Fields</h2>
 <table><tr><td id='structfield.socket'><a class='stability Experimental' title='Experimental'></a><code>socket</code></td><td><div class='docblock'><p>The socket addresses that the server is bound to.</p>
-</div></td></tr></table><h2 id='methods'>Methods</h2><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: NetworkAcceptor&lt;S&gt;, S: NetworkStream&gt; <a class='struct' href='../rustful/struct.Listening.html' title='rustful::Listening'>Listening</a>&lt;A&gt;</code></h3><div class='impl-items'><h4 id='method.await' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.await' class='fnname'>await</a>(&amp;mut self)</code></h4>
+</div></td></tr></table><h2 id='methods'>Methods</h2><h3 class='impl'><a class='stability Experimental' title='Experimental'></a><code>impl&lt;A: <a class='trait' href='../hyper/net/trait.NetworkAcceptor.html' title='hyper::net::NetworkAcceptor'>NetworkAcceptor</a>&lt;S&gt;, S: <a class='trait' href='../hyper/net/trait.NetworkStream.html' title='hyper::net::NetworkStream'>NetworkStream</a>&gt; <a class='struct' href='../rustful/struct.Listening.html' title='rustful::Listening'>Listening</a>&lt;A&gt;</code></h3><div class='impl-items'><h4 id='method.await' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.await' class='fnname'>await</a>(&amp;mut self)</code></h4>
 <div class='docblock'><p>Causes the current thread to wait for this listening to complete.</p>
 </div><h4 id='method.close' class='method'><a class='stability Experimental' title='Experimental'></a><code>fn <a href='#method.close' class='fnname'>close</a>(&amp;mut self) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.tuple.html'>()</a>, <a class='enum' href='../rustful/enum.HttpError.html' title='rustful::HttpError'>HttpError</a>&gt;</code></h4>
 <div class='docblock'><p>Stop the server from listening to its socket address.</p>
