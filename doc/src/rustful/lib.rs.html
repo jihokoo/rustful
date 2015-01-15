@@ -983,6 +983,35 @@
 <span id="941">941</span>
 <span id="942">942</span>
 <span id="943">943</span>
+<span id="944">944</span>
+<span id="945">945</span>
+<span id="946">946</span>
+<span id="947">947</span>
+<span id="948">948</span>
+<span id="949">949</span>
+<span id="950">950</span>
+<span id="951">951</span>
+<span id="952">952</span>
+<span id="953">953</span>
+<span id="954">954</span>
+<span id="955">955</span>
+<span id="956">956</span>
+<span id="957">957</span>
+<span id="958">958</span>
+<span id="959">959</span>
+<span id="960">960</span>
+<span id="961">961</span>
+<span id="962">962</span>
+<span id="963">963</span>
+<span id="964">964</span>
+<span id="965">965</span>
+<span id="966">966</span>
+<span id="967">967</span>
+<span id="968">968</span>
+<span id="969">969</span>
+<span id="970">970</span>
+<span id="971">971</span>
+<span id="972">972</span>
 </pre><pre class='rust '>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>crate_name</span> <span class='op'>=</span> <span class='string'>&quot;rustful&quot;</span>]</span>
 
@@ -1267,6 +1296,16 @@
 
 
 
+<span class='kw'>pub</span> <span class='kw'>enum</span> <span class='ident'>Protocol</span> {
+	<span class='ident'>Http</span>,
+	<span class='ident'>Https</span> {
+		<span class='ident'>cert</span>: <span class='ident'>Path</span>,
+		<span class='ident'>key</span>: <span class='ident'>Path</span>
+	}
+}
+
+
+
 <span class='doccomment'>///Used to build and run a server.</span>
 <span class='doccomment'>///</span>
 <span class='doccomment'>///Each field has a corresponding modifier method and</span>
@@ -1297,6 +1336,9 @@
 
 	<span class='doccomment'>///The host address where the server will listen for requests.</span>
 	<span class='kw'>pub</span> <span class='ident'>host</span>: <span class='ident'>IpAddr</span>,
+
+	<span class='doccomment'>///The type of HTTP protocol.</span>
+	<span class='kw'>pub</span> <span class='ident'>protocol</span>: <span class='ident'>Protocol</span>,
 
 	<span class='doccomment'>///The number of threads to be used in the server task pool.</span>
 	<span class='doccomment'>///The default (`None`) is based on recommendations from the system.</span>
@@ -1337,6 +1379,7 @@
 			<span class='ident'>handlers</span>: (),
 			<span class='ident'>port</span>: <span class='number'>80</span>,
 			<span class='ident'>host</span>: <span class='ident'>Ipv4Addr</span>(<span class='number'>0</span>, <span class='number'>0</span>, <span class='number'>0</span>, <span class='number'>0</span>),
+			<span class='ident'>protocol</span>: <span class='ident'>Protocol</span>::<span class='ident'>Http</span>,
 			<span class='ident'>threads</span>: <span class='prelude-val'>None</span>,
 			<span class='ident'>server</span>: <span class='string'>&quot;rustful&quot;</span>.<span class='ident'>to_owned</span>(),
 			<span class='ident'>content_type</span>: <span class='ident'>Mime</span>(
@@ -1359,6 +1402,7 @@
 			<span class='ident'>handlers</span>: <span class='ident'>handlers</span>,
 			<span class='ident'>port</span>: <span class='self'>self</span>.<span class='ident'>port</span>,
 			<span class='ident'>host</span>: <span class='self'>self</span>.<span class='ident'>host</span>,
+			<span class='ident'>protocol</span>: <span class='self'>self</span>.<span class='ident'>protocol</span>,
 			<span class='ident'>threads</span>: <span class='self'>self</span>.<span class='ident'>threads</span>,
 			<span class='ident'>server</span>: <span class='self'>self</span>.<span class='ident'>server</span>,
 			<span class='ident'>content_type</span>: <span class='self'>self</span>.<span class='ident'>content_type</span>,
@@ -1378,6 +1422,15 @@
 	<span class='doccomment'>///Change the host address. Default is `0.0.0.0`.</span>
 	<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>host</span>(<span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>host</span>: <span class='ident'>IpAddr</span>) <span class='op'>-&gt;</span> <span class='ident'>Server</span><span class='op'>&lt;</span><span class='ident'>R</span>, <span class='ident'>C</span><span class='op'>&gt;</span> {
 		<span class='self'>self</span>.<span class='ident'>host</span> <span class='op'>=</span> <span class='ident'>host</span>;
+		<span class='self'>self</span>
+	}
+
+	<span class='doccomment'>///Change the protocol to HTTPS.</span>
+	<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>https</span>(<span class='kw-2'>mut</span> <span class='self'>self</span>, <span class='ident'>cert</span>: <span class='ident'>Path</span>, <span class='ident'>key</span>: <span class='ident'>Path</span>) <span class='op'>-&gt;</span> <span class='ident'>Server</span><span class='op'>&lt;</span><span class='ident'>R</span>, <span class='ident'>C</span><span class='op'>&gt;</span> {
+		<span class='self'>self</span>.<span class='ident'>protocol</span> <span class='op'>=</span> <span class='ident'>Protocol</span>::<span class='ident'>Https</span> {
+			<span class='ident'>cert</span>: <span class='ident'>cert</span>,
+			<span class='ident'>key</span>: <span class='ident'>key</span>
+		};
 		<span class='self'>self</span>
 	}
 
@@ -1434,8 +1487,12 @@
 	<span class='doccomment'>///Start the server.</span>
 	<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>run</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>hyper</span>::<span class='ident'>HttpResult</span><span class='op'>&lt;</span><span class='ident'>Listening</span><span class='op'>&gt;</span> {
 		<span class='kw'>let</span> <span class='ident'>threads</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>threads</span>;
-		<span class='kw'>let</span> <span class='ident'>server</span> <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>build</span>();
-		<span class='kw'>let</span> <span class='ident'>http</span> <span class='op'>=</span> <span class='ident'>hyper</span>::<span class='ident'>server</span>::<span class='ident'>Server</span>::<span class='ident'>http</span>(<span class='ident'>server</span>.<span class='ident'>host</span>, <span class='ident'>server</span>.<span class='ident'>port</span>);
+		<span class='kw'>let</span> (<span class='ident'>server</span>, <span class='ident'>protocol</span>) <span class='op'>=</span> <span class='self'>self</span>.<span class='ident'>build</span>();
+		<span class='kw'>let</span> <span class='ident'>http</span> <span class='op'>=</span> <span class='kw'>match</span> <span class='ident'>protocol</span> {
+			<span class='ident'>Protocol</span>::<span class='ident'>Http</span> <span class='op'>=&gt;</span> <span class='ident'>hyper</span>::<span class='ident'>server</span>::<span class='ident'>Server</span>::<span class='ident'>http</span>(<span class='ident'>server</span>.<span class='ident'>host</span>, <span class='ident'>server</span>.<span class='ident'>port</span>),
+			<span class='ident'>Protocol</span>::<span class='ident'>Https</span> {<span class='ident'>cert</span>, <span class='ident'>key</span>} <span class='op'>=&gt;</span> <span class='ident'>hyper</span>::<span class='ident'>server</span>::<span class='ident'>Server</span>::<span class='ident'>https</span>(<span class='ident'>server</span>.<span class='ident'>host</span>, <span class='ident'>server</span>.<span class='ident'>port</span>, <span class='ident'>cert</span>, <span class='ident'>key</span>)
+		};
+
 		<span class='kw'>match</span> <span class='ident'>threads</span> {
 			<span class='prelude-val'>Some</span>(<span class='ident'>threads</span>) <span class='op'>=&gt;</span> <span class='ident'>http</span>.<span class='ident'>listen_threads</span>(<span class='ident'>server</span>, <span class='ident'>threads</span>),
 			<span class='prelude-val'>None</span> <span class='op'>=&gt;</span> <span class='ident'>http</span>.<span class='ident'>listen</span>(<span class='ident'>server</span>)
@@ -1443,8 +1500,8 @@
 	}
 
 	<span class='doccomment'>///Build a runnable instance of the server.</span>
-	<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>build</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>ServerInstance</span><span class='op'>&lt;</span><span class='ident'>R</span>, <span class='ident'>C</span><span class='op'>&gt;</span> {
-		<span class='ident'>ServerInstance</span> {
+	<span class='kw'>pub</span> <span class='kw'>fn</span> <span class='ident'>build</span>(<span class='self'>self</span>) <span class='op'>-&gt;</span> (<span class='ident'>ServerInstance</span><span class='op'>&lt;</span><span class='ident'>R</span>, <span class='ident'>C</span><span class='op'>&gt;</span>, <span class='ident'>Protocol</span>) {
+		(<span class='ident'>ServerInstance</span> {
 			<span class='ident'>handlers</span>: <span class='self'>self</span>.<span class='ident'>handlers</span>,
 			<span class='ident'>port</span>: <span class='self'>self</span>.<span class='ident'>port</span>,
 			<span class='ident'>host</span>: <span class='self'>self</span>.<span class='ident'>host</span>,
@@ -1455,7 +1512,8 @@
 			<span class='ident'>last_cache_clean</span>: <span class='ident'>RwLock</span>::<span class='ident'>new</span>(<span class='ident'>Timespec</span>::<span class='ident'>new</span>(<span class='number'>0</span>, <span class='number'>0</span>)),
 			<span class='ident'>context_plugins</span>: <span class='self'>self</span>.<span class='ident'>context_plugins</span>,
 			<span class='ident'>response_plugins</span>: <span class='self'>self</span>.<span class='ident'>response_plugins</span>,
-		}
+		},
+		<span class='self'>self</span>.<span class='ident'>protocol</span>)
 	}
 }
 
@@ -1472,7 +1530,7 @@
 <span class='doccomment'>///#     fn handle_request(&amp;self, _context: Context, _response: Response) {}</span>
 <span class='doccomment'>///# }</span>
 <span class='doccomment'>///# let router = R;</span>
-<span class='doccomment'>///let server_instance = Server::new().port(8080).handlers(router).build();</span>
+<span class='doccomment'>///let (server_instance, protocol) = Server::new().port(8080).handlers(router).build();</span>
 <span class='doccomment'>///```</span>
 <span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>ServerInstance</span><span class='op'>&lt;</span><span class='ident'>R</span>, <span class='ident'>C</span><span class='op'>&gt;</span> {
 	<span class='ident'>handlers</span>: <span class='ident'>R</span>,
