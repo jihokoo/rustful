@@ -559,7 +559,7 @@ any such thing; just use the status code as a <code>StatusCode</code>.</p>
 <p>If you encounter a status code that you do not know how to deal with, you should treat it as the
 <code>x00</code> status code—e.g. for code 123, treat it as 100 (Continue). This can be achieved with
 <code>self.class().default_code()</code>:</p>
-<pre class='rust '>
+<pre id='rust-example-rendered' class='rust '>
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>Code123</span>.<span class='ident'>class</span>().<span class='ident'>default_code</span>(), <span class='ident'>Continue</span>);
 </pre>
 </div><h2 class='variants'>Variants</h2>
@@ -1077,7 +1077,7 @@ this canonical reason phrase really is the only reason phrase you’ll find.</p>
 </div><h4 id='method.class' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.class' class='fnname'>class</a>(&amp;self) -&gt; <a class='enum' href='../hyper/status/enum.StatusClass.html' title='hyper::status::StatusClass'>StatusClass</a></code></h4>
 <div class='docblock'><p>Determine the class of a status code, based on its first digit.</p>
 </div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><a class='stability Stable' title='Stable'></a><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/marker/trait.Copy.html' title='core::marker::Copy'>Copy</a> for <a class='enum' href='../rustful/enum.StatusCode.html' title='rustful::StatusCode'>StatusCode</a></code></h3><div class='impl-items'></div><h3 class='impl'><a class='stability Unstable' title='Unstable: I/O and core have yet to be reconciled'></a><code>impl <a class='trait' href='http://doc.rust-lang.org/nightly/core/fmt/trait.String.html' title='core::fmt::String'>String</a> for <a class='enum' href='../rustful/enum.StatusCode.html' title='rustful::StatusCode'>StatusCode</a></code></h3><div class='docblock'><p>Formats the status code, <em>including</em> the canonical reason.</p>
-<pre class='rust '>
+<pre id='rust-example-rendered' class='rust '>
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='kw-2'>&amp;</span><span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>ImATeapot</span>)[],
            <span class='string'>&quot;418 I&#39;m a teapot&quot;</span>);
 <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='kw-2'>&amp;</span><span class='macro'>format</span><span class='macro'>!</span>(<span class='string'>&quot;{}&quot;</span>, <span class='ident'>Code123</span>)[],

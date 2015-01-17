@@ -60,14 +60,14 @@
 <p>Prefer to use the typed getters instead.</p>
 
 <p>Example:</p>
-<pre class='rust '>
+<pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='ident'>raw_content_type</span> <span class='op'>=</span> <span class='ident'>headers</span>.<span class='ident'>get_raw</span>(<span class='string'>&quot;content-type&quot;</span>);
 </pre>
 </div><h4 id='method.set_raw' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.set_raw' class='fnname'>set_raw</a>&lt;K&gt;(&amp;mut self, name: K, value: <a class='struct' href='http://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='http://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a href='http://doc.rust-lang.org/nightly/std/primitive.u8.html'>u8</a>&gt;&gt;) <span class='where'>where K: <a class='trait' href='http://doc.rust-lang.org/nightly/core/borrow/trait.IntoCow.html' title='core::borrow::IntoCow'>IntoCow</a>&lt;'static, <a class='struct' href='http://doc.rust-lang.org/nightly/collections/string/struct.String.html' title='collections::string::String'>String</a>, <a href='http://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>&gt;</span></code></h4>
 <div class='docblock'><p>Set the raw value of a header, bypassing any typed headers.</p>
 
 <p>Example:</p>
-<pre class='rust '>
+<pre id='rust-example-rendered' class='rust '>
 <span class='ident'>headers</span>.<span class='ident'>set_raw</span>(<span class='string'>&quot;content-length&quot;</span>, <span class='macro'>vec</span><span class='macro'>!</span>[<span class='string'>b&quot;5&quot;</span>.<span class='ident'>to_vec</span>()]);
 </pre>
 </div><h4 id='method.get' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.get' class='fnname'>get</a>&lt;H&gt;(&amp;self) -&gt; <a class='enum' href='http://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;&amp;H&gt; <span class='where'>where H: <a class='trait' href='../../rustful/header/trait.Header.html' title='rustful::header::Header'>Header</a>, H: <a class='trait' href='../../rustful/header/trait.HeaderFormat.html' title='rustful::header::HeaderFormat'>HeaderFormat</a></span></code></h4>
@@ -78,7 +78,7 @@
 <div class='docblock'><p>Returns a boolean of whether a certain header is in the map.</p>
 
 <p>Example:</p>
-<pre class='rust '>
+<pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='ident'>has_type</span> <span class='op'>=</span> <span class='ident'>headers</span>.<span class='ident'>has</span>::<span class='op'>&lt;</span><span class='ident'>ContentType</span><span class='op'>&gt;</span>();
 </pre>
 </div><h4 id='method.remove' class='method'><a class='stability Unmarked' title='No stability level'></a><code>fn <a href='#method.remove' class='fnname'>remove</a>&lt;H&gt;(&amp;mut self) -&gt; <a href='http://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a> <span class='where'>where H: <a class='trait' href='../../rustful/header/trait.Header.html' title='rustful::header::Header'>Header</a>, H: <a class='trait' href='../../rustful/header/trait.HeaderFormat.html' title='rustful::header::HeaderFormat'>HeaderFormat</a></span></code></h4>

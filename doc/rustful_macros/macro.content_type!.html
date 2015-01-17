@@ -67,7 +67,7 @@
 <div class='docblock'><p>A macro for assigning content types.</p>
 
 <p>It takes a main type, a sub type and a parameter list. Instead of this:</p>
-<pre class='rust '>
+<pre id='rust-example-rendered' class='rust '>
 <span class='ident'>response</span>.<span class='ident'>headers</span>.<span class='ident'>content_type</span> <span class='op'>=</span> <span class='prelude-val'>Some</span>(<span class='ident'>MediaType</span> {
     <span class='ident'>type_</span>: <span class='ident'>String</span>::<span class='ident'>from_str</span>(<span class='string'>&quot;text&quot;</span>),
     <span class='ident'>subtype</span>: <span class='ident'>String</span>::<span class='ident'>from_str</span>(<span class='string'>&quot;html&quot;</span>),
@@ -76,16 +76,16 @@
 </pre>
 
 <p>it can be written like this:</p>
-<pre class='rust '>
+<pre id='rust-example-rendered' class='rust '>
 <span class='ident'>response</span>.<span class='ident'>headers</span>.<span class='ident'>content_type</span> <span class='op'>=</span> <span class='macro'>content_type</span><span class='macro'>!</span>(<span class='string'>&quot;text&quot;</span>, <span class='string'>&quot;html&quot;</span>, <span class='string'>&quot;charset&quot;</span>: <span class='string'>&quot;UTF-8&quot;</span>);
 </pre>
 
 <p>The <code>&quot;charset&quot;: &quot;UTF-8&quot;</code> part defines the parameter list for the content type.
 It may contain more than one parameter, or be omitted:</p>
-<pre class='rust '>
+<pre id='rust-example-rendered' class='rust '>
 <span class='ident'>response</span>.<span class='ident'>headers</span>.<span class='ident'>content_type</span> <span class='op'>=</span> <span class='macro'>content_type</span><span class='macro'>!</span>(<span class='string'>&quot;application&quot;</span>, <span class='string'>&quot;octet-stream&quot;</span>, <span class='string'>&quot;type&quot;</span>: <span class='string'>&quot;image/gif&quot;</span>, <span class='string'>&quot;padding&quot;</span>: <span class='string'>&quot;4&quot;</span>);
 </pre>
-<pre class='rust '>
+<pre id='rust-example-rendered' class='rust '>
 <span class='ident'>response</span>.<span class='ident'>headers</span>.<span class='ident'>content_type</span> <span class='op'>=</span> <span class='macro'>content_type</span><span class='macro'>!</span>(<span class='string'>&quot;image&quot;</span>, <span class='string'>&quot;png&quot;</span>);
 </pre>
 </div></section>

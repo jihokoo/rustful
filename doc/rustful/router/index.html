@@ -48,7 +48,7 @@
 <div class='docblock'><p><code>TreeRouter</code> stores items, such as request handlers, using an HTTP method and a path as keys.</p>
 
 <p>The <code>TreeRouter</code> can be created from a vector of predefined paths, like this:</p>
-<pre class='rust '>
+<pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='ident'>routes</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[
     (<span class='ident'>Get</span>, <span class='string'>&quot;/about&quot;</span>, <span class='ident'>about_us</span>),
     (<span class='ident'>Get</span>, <span class='string'>&quot;/user/:user&quot;</span>, <span class='ident'>show_user</span>),
@@ -61,7 +61,7 @@
 </pre>
 
 <p>Routes may also be added after the <code>TreeRouter</code> was created, like this:</p>
-<pre class='rust '>
+<pre id='rust-example-rendered' class='rust '>
 <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>router</span> <span class='op'>=</span> <span class='ident'>TreeRouter</span>::<span class='ident'>new</span>();
 
 <span class='ident'>router</span>.<span class='ident'>insert</span>(<span class='ident'>Get</span>, <span class='string'>&quot;/about&quot;</span>, <span class='ident'>about_us</span>);
@@ -72,7 +72,7 @@
 </pre>
 
 <p>TreeRouter can also be used with a special macro for creating routes, called <code>insert_routes!{...}</code>:</p>
-<pre class='rust '>
+<pre id='rust-example-rendered' class='rust '>
 <span class='attribute'>#<span class='op'>!</span>[<span class='ident'>feature</span>(<span class='ident'>phase</span>)]</span>
 <span class='attribute'>#[<span class='ident'>phase</span>(<span class='ident'>plugin</span>)]</span>
 <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>rustful_macros</span>;

@@ -57,14 +57,14 @@ that point and it will be sent as a value to the item.</p>
 
 <p>Wildcards (a single <code>*</code>) will consume the segments until the rest of the
 path gives a match.</p>
-<pre class='rust '>
+<pre id='rust-example-rendered' class='rust '>
 <span class='ident'>pattern</span> <span class='op'>=</span> <span class='string'>&quot;a/*/b&quot;</span>
 <span class='string'>&quot;a/c/b&quot;</span> <span class='op'>-&gt;</span> <span class='kw'>match</span>
 <span class='string'>&quot;a/c/d/b&quot;</span> <span class='op'>-&gt;</span> <span class='kw'>match</span>
 <span class='string'>&quot;a/b&quot;</span> <span class='op'>-&gt;</span> <span class='ident'>no</span> <span class='kw'>match</span>
 <span class='string'>&quot;a/c/b/d&quot;</span> <span class='op'>-&gt;</span> <span class='ident'>no</span> <span class='kw'>match</span>
 </pre>
-<pre class='rust '>
+<pre id='rust-example-rendered' class='rust '>
 <span class='ident'>pattern</span> <span class='op'>=</span> <span class='string'>&quot;a/b/*&quot;</span>
 <span class='string'>&quot;a/b/c&quot;</span> <span class='op'>-&gt;</span> <span class='kw'>match</span>
 <span class='string'>&quot;a/b/c/d&quot;</span> <span class='op'>-&gt;</span> <span class='kw'>match</span>
