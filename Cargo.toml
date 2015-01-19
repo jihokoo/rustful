@@ -14,9 +14,11 @@ default = ["macros"]
 macros = ["rustful_macros"]
 
 [dependencies]
-hyper = "*"
 time = "*"
 url = "*"
+
+[dependencies.hyper]
+git = "https://github.com/jihokoo/hyper.git"
 
 [dependencies.rustful_macros]
 path = "macros"
